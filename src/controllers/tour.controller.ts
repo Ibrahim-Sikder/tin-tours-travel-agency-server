@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { tourServices } from "../services/tour.services";
 
 
 
 
-const createTour = async(req:Request, res:Response)=>{
+const createTour = async(req:Request, res:Response, next:NextFunction)=>{
    try{
     const tourData = req.body;
     const result = await tourServices.createTourIntoDB(tourData)
@@ -16,11 +16,8 @@ const createTour = async(req:Request, res:Response)=>{
     })
    }catch(err){
     console.log(err)
-    res.status(200).json({
-        success: 'true',
-        message: 'tour create failed!',
-        data: err
-    })
+    next(err)
+    
    }
 }
 const getAllTour = async (req:Request, res:Response)=>{

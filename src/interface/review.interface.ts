@@ -11,7 +11,7 @@ interface IReview {
 
 
   interface IReviewMode extends Model<IReview> {
-    myStaticMethod(): number;
+    calcAverageRatings(): Promise<void>;
   }
 
 
