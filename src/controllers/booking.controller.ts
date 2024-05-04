@@ -22,16 +22,8 @@ const createBooking = async (
     next(err)
   }
 }
-const getAllBooking = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.params.userId
-  const result = await bookingServices.getAllBookingOfUser(userId)
-  sendSuccessResponse(res, {
-    statusCode: 200,
-    message: 'All booking of user fetched successfully!',
-    data: result,
-  })
-})
-const getAllBookingOfUser = async (req: Request, res: Response) => {
+
+const getAllBooking = async (req: Request, res: Response) => {
   try {
     const result = await bookingServices.getAllBookingFromDB()
     res.status(200).json({
@@ -47,6 +39,16 @@ const getAllBookingOfUser = async (req: Request, res: Response) => {
     })
   }
 }
+const getAllBookingOfUser = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.params.userId
+  const result = await bookingServices.getAllBookingFromDB(userId)
+  sendSuccessResponse(res, {
+    statusCode: 200,
+    message: 'All booking of user fetched successfully!',
+    data: result,
+  })
+})
+
 const getSingleBooking = async (req: Request, res: Response) => {
   try {
     const id = req.params.id
@@ -100,7 +102,7 @@ const deleteBooking = async (req: Request, res: Response) => {
   }
 }
 
-export const tourControllers = {
+export const bookingController = {
   createBooking,
   getAllBooking,
   getSingleBooking,

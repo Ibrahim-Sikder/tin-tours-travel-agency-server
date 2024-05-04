@@ -4,6 +4,7 @@ import express from 'express';
 import { userRouters } from './user.route';
 import { tourRoutes } from './tour.route';
 import { reviewRouters } from './review.route';
+import { bookingRoutes } from './booking.route';
 
 
 const globalRoute = express.Router()
@@ -24,6 +25,10 @@ const routes = [
     {
         path: '/reviews',
         route: reviewRouters,
+    },
+    {
+        path: '/booking',
+        route: bookingRoutes,
     },
 ]
 

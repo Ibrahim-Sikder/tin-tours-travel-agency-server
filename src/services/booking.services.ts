@@ -16,9 +16,7 @@ const getAllBookingOfUser = async (id: string) => {
   return result
 }
 const getSingleBookingFromDB = async (id: string) => {
-  const result = await Booking.find({
-    user: id,
-  })
+  const result = await Booking.findById(id)
   return result
 }
 const updateBookingIntoDB = async (id: string, reviewData: ITour) => {
