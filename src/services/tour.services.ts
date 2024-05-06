@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ITour } from "../interface/tour.interface"
 import Tour from "../models/tour.model";
 
@@ -7,11 +8,30 @@ const createTourIntoDB = async (tourData:ITour)=>{
     return result;
 
 }
-const getAllTourFromDB = async ()=>{
-const result = Tour.find().populate('reviews');
+const getAllTourFromDB = async (query:any)=>{
+    console.log(query, 'before delete')
+
+    const queryObj = {...query }
+
+    const excludeField =  [
+        'page',
+        'searchTerm',
+        'limit',
+        'sort',
+        'sortBy',
+        'sortOrder',
+        'fields'
+    ]
+
+    excludeField.forEach((keyword)=>delete queryObj[keyword])
+    console.log(queryObj, 'after delete ')
+
+const result = Tour.find(queryObj).populate('reviews');
 return result;
 }
 const getSingleTourFromDB = async (id:string)=>{
+
+
     const result = Tour.findById(id).populate('reviews');
     return result;
 }

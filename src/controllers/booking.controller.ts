@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import { bookingServices } from '../services/booking.services'
 import { catchAsync } from '../utils/catchAsync'
 import { sendSuccessResponse } from '../utils/sendResponse'
+import Tour from '../models/tour.model'
 
 const createBooking = async (
   req: Request,
@@ -10,8 +11,16 @@ const createBooking = async (
   next: NextFunction,
 ) => {
   try {
-    const tourData = req.body
-    const result = await bookingServices.createBookingIntoDB(tourData)
+    const bookingData = req.body
+    const result = await bookingServices.createBookingIntoDB(bookingData)
+    if (!result) {
+      throw new Error('Booking could not be created')
+    }
+
+    await Tour.findByIdAndUpdate(result.tour, {
+      $inc: { availableSeats: -result.bookedSlots },
+    })
+
     res.status(200).json({
       success: 'true',
       message: 'Booking create successfully!',

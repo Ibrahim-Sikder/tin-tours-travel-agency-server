@@ -1,9 +1,39 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import mongoose from 'mongoose'
 import { ITour } from '../interface/tour.interface'
 import { Booking } from '../models/booking.model'
+import Tour from '../models/tour.model'
 
-const createBookingIntoDB = async (reviewData: ITour) => {
-  const result = await Booking.create(reviewData)
-  return result
+const createBookingIntoDB = async (bookingData: ITour) => {
+  const session = await mongoose.startSession()
+
+  session.startTransaction()
+  try {
+    const booking = await Booking.create([bookingData], { session })
+    if (!booking) {
+      throw new Error('Booking Failed')
+    }
+    const tour = await Tour.findByIdAndUpdate(
+      booking[0].tour,
+      {
+        $inc: { availableSeats: -booking[0].bookedSlots },
+      },
+      {
+        session,
+      },
+    )
+    if (!tour) {
+      throw new Error('Booking failed')
+    }
+    await session.commitTransaction()
+    await session.endSession()
+    return booking[0]
+  } catch (err: any) {
+    await session.abortTransaction()
+    await session.endSession()
+    throw new Error(err)
+    console.log(err)
+  }
 }
 const getAllBookingFromDB = async () => {
   const result = Booking.find()
