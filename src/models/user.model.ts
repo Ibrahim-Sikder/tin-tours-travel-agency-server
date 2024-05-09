@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Query, Schema, model } from "mongoose";
 import { IUser } from "../interface/user.interface";
+import { ACCOUNT_STATUS, USER_ROLE } from "../constant/user.constant";
 
 
 const userSchema = new Schema<IUser>({
@@ -22,14 +23,25 @@ const userSchema = new Schema<IUser>({
     photo: String,
     role: {
       type: String,
-      enum: ['user', 'admin'],
-      default: 'user',
+      enum: Object.values(USER_ROLE), // ['user', 'admin']
+      default: USER_ROLE.user,
     },
     userStatus: {
       type: String,
-      enum: ['active', 'inactive'],
-      default: 'active',
+      enum: Object.values(ACCOUNT_STATUS),
+      default: ACCOUNT_STATUS.active, // ['active', 'inactive']
     },
+    password: {
+      type: String,
+      required: [true, 'Please provide password '],
+      select:0,
+    },
+    passwordChangeAt: {
+      type: Date,
+      default: null
+    }
+  },{
+    timestamps: true
   })
 
   // userSchema.pre(/^find/, function(this:Query<IUser, Document>, next){

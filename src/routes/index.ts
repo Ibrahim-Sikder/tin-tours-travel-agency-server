@@ -5,6 +5,7 @@ import { userRouters } from './user.route';
 import { tourRoutes } from './tour.route';
 import { reviewRouters } from './review.route';
 import { bookingRoutes } from './booking.route';
+import { authRoutes } from './auth.route';
 
 
 const globalRoute = express.Router()
@@ -14,6 +15,10 @@ globalRoute.use('/reviews', reviewRouters)
 
 
 const routes = [
+    {
+        path: '/auth',
+        route: authRoutes,
+    },
     {
         path: '/users',
         route: userRouters,
@@ -30,6 +35,7 @@ const routes = [
         path: '/booking',
         route: bookingRoutes,
     },
+  
 ]
 
 routes.forEach((routeObject)=>{

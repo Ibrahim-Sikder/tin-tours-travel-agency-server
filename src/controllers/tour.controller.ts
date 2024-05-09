@@ -19,9 +19,7 @@ const createTour = async (req: Request, res: Response, next: NextFunction) => {
 }
 const getAllTour = async (req: Request, res: Response) => {
   try {
-    const query = req.query
-    console.log(query)
-    const result = await tourServices.getAllTourFromDB(query)
+    const result = await tourServices.getAllTourFromDB(req.query)
     res.status(200).json({
       status: 'success',
       message: 'Tour are retrieve successfully !',
