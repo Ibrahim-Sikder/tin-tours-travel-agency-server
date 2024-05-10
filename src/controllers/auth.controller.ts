@@ -22,16 +22,44 @@ const register = catchAsync(async (req: Request, res: Response) => {
 const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
    
-    const result = await authServices.login()
+    const {accessToken, refreshToken} = await authServices.login()
+
+    res.cookie('refreshToken', refreshToken,{
+      httpOnly: true,
+      secure:  config.node_env === 'production'
+    })
+
+
     res.status(200).json({
       status: 'success',
       message: 'User login successfully !',
+      data: {accessToken},
+    })
+  } catch (err: any) {
+    next(err)
+  }
+}
+
+const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+   const refreshToken = req.cookies.refreshToken 
+   if(!refreshToken){
+    throw new Error('Invalid token')
+   }
+
+   const result = await authServices.refreshToken(refreshToken)
+    
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Refresh token !',
       data: result,
     })
   } catch (err: any) {
     next(err)
   }
 }
+
 
 const changePassword = async(req:Request, res:Response)=>{
   // const token = req.headers.authorization
@@ -59,4 +87,5 @@ export const authController = {
   register,
   login,
   changePassword,
+  refreshToken
 }

@@ -7,10 +7,12 @@ import express, { Application, NextFunction, Request, Response } from 'express'
 import { notFound } from './middleware/notFound'
 import { globalError } from './middleware/globaleError'
 import globalRoute from './routes'
+import cookieParser from 'cookie-parser'
 
 const app: Application = express()
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 
 
 app.use('/api/v1', globalRoute)
