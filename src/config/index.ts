@@ -10,4 +10,6 @@ export default {
   database_url_local: process.env.DATABASE_URL_LOCAL,
   database_url: process.env.DATABASE_URL,
   node_env: process.env.NODE_ENV,
+  jwt_access_token: process.env.JWT_ACCESS_SECRETE,
+  jwt_expires_in:process.env.JWT_EXPIRES_IN
 }
